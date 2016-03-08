@@ -26,7 +26,7 @@ public class Model {
 			String s;
 			while ((s = reader.readLine()) != null) {
 				System.out.println(s);
-				// Hej
+				// Hejdadadasdasd
 			}
 			
 		} catch (MalformedURLException e) {
