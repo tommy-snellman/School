@@ -11,6 +11,7 @@ import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
 
+import model.Currency;
 import model.Model;
 import model.Stock;
 import view.CurrencyChangeEvent;
@@ -22,6 +23,8 @@ import view.View;
 public class Controller implements SearchListener, CurrencyListener {
 	private View view;
 	private Model model;
+	private Stock stock1, stock2;
+	private Currency currency;
 	
 	public Controller(View view, Model model) {
 		this.view = view;
@@ -37,6 +40,10 @@ public class Controller implements SearchListener, CurrencyListener {
 		}
 	}
 	
+	private void updateStocks(Stock s1, Stock s2) {
+		
+	}
+	
 	@Override
 	public void searchPerformed(SearchFormEvent event) {
 		String t1 = event.getT1();
@@ -44,8 +51,8 @@ public class Controller implements SearchListener, CurrencyListener {
 		String d1 = event.getDate1();
 		String d2 = event.getDate2(); 
 		
-		Stock stock1 = new Stock(t1, d1, d2);
-		Stock stock2 = new Stock(t2, d1, d2);
+		stock1 = new Stock(t1, d1, d2);
+		stock2 = new Stock(t2, d1, d2);
 		stock1.fetchData();
 		stock2.fetchData();
 		
@@ -54,11 +61,11 @@ public class Controller implements SearchListener, CurrencyListener {
 
 	@Override
 	public void currencySwitch(CurrencyChangeEvent event) {
-		String currency = event.getCurrency();
+		String curr = event.getCurrency();
 		String d1 = event.getDateF();
 		String d2 = event.getDateT();
 		
-		model.fetchCurrencyData(currency, d1, d2);
+		currency = new Currency(curr, d1, d2);
 	}
 	
 	
