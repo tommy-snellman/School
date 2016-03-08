@@ -25,19 +25,23 @@ import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import javax.swing.JList;
 import javax.swing.JScrollBar;
+import javax.swing.JScrollPane;
+
 import java.awt.Insets;
+import javax.swing.JTextPane;
+import javax.swing.JTextArea;
 
 
 public class View extends JFrame implements ActionListener {
 	
 	private Model model;
 	private SearchListener searchListener;
-	private CurrencyListener currencyListener;
 	private JTextField ticker1;
 	private JTextField ticker2;
 	private JTextField date1;
 	private JTextField date2;
 	private final ButtonGroup buttonGroup = new ButtonGroup();
+	private JTextArea textArea;
 
 
 	/**
@@ -150,71 +154,57 @@ public class View extends JFrame implements ActionListener {
 		gbl_graphPanel.rowWeights = new double[]{0.0, Double.MIN_VALUE};
 		graphPanel.setLayout(gbl_graphPanel);
 		
-		JPanel tablePAnel = new JPanel();
-		tabbedPane.addTab("Table", null, tablePAnel, null);
-		GridBagLayout gbl_tablePAnel = new GridBagLayout();
-		gbl_tablePAnel.columnWidths = new int[]{0, 0, 0};
-		gbl_tablePAnel.rowHeights = new int[]{0, 0, 0};
-		gbl_tablePAnel.columnWeights = new double[]{1.0, 0.0, Double.MIN_VALUE};
-		gbl_tablePAnel.rowWeights = new double[]{1.0, 0.0, Double.MIN_VALUE};
-		tablePAnel.setLayout(gbl_tablePAnel);
+		JPanel tablePanel = new JPanel();
+		tabbedPane.addTab("Table", null, tablePanel, null);
+		GridBagLayout gbl_tablePanel = new GridBagLayout();
+		gbl_tablePanel.columnWidths = new int[]{390, 0};
+		gbl_tablePanel.rowHeights = new int[]{398, 0};
+		gbl_tablePanel.columnWeights = new double[]{1.0, Double.MIN_VALUE};
+		gbl_tablePanel.rowWeights = new double[]{1.0, Double.MIN_VALUE};
+		tablePanel.setLayout(gbl_tablePanel);
 		
-		JList list = new JList();
-		GridBagConstraints gbc_list = new GridBagConstraints();
-		gbc_list.insets = new Insets(0, 0, 5, 0);
-		gbc_list.fill = GridBagConstraints.BOTH;
-		gbc_list.gridx = 0;
-		gbc_list.gridy = 0;
-		tablePAnel.add(list, gbc_list);
+		JScrollPane scrollPane = new JScrollPane();
+		GridBagConstraints gbc_scrollPane = new GridBagConstraints();
+		gbc_scrollPane.fill = GridBagConstraints.BOTH;
+		gbc_scrollPane.gridx = 0;
+		gbc_scrollPane.gridy = 0;
+		tablePanel.add(scrollPane, gbc_scrollPane);
 		
-		JScrollBar scrollBar = new JScrollBar();
-		GridBagConstraints gbc_scrollBar = new GridBagConstraints();
-		gbc_scrollBar.fill = GridBagConstraints.VERTICAL;
-		gbc_scrollBar.gridx = 1;
-		gbc_scrollBar.gridy = 0;
-		tablePAnel.add(scrollBar, gbc_scrollBar);
+		textArea = new JTextArea();
+		scrollPane.setViewportView(textArea);
+		GridBagConstraints gbc_table = new GridBagConstraints();
+		gbc_table.insets = new Insets(0, 0, 5, 5);
+		gbc_table.fill = GridBagConstraints.BOTH;
+		gbc_table.gridx = 0;
+		gbc_table.gridy = 0;
+		textArea.setEditable(false);
+		
 	}
 	
-	@Override
 	public void actionPerformed(ActionEvent e) {
-		if (e.getActionCommand().equals("Search")) {
-			String t1 = ticker1.getText();
-			String t2 = ticker2.getText();
-			String dtFrom = date1.getText();
-			String dtTo = date2.getText();
-			
-			SearchFormEvent ev = new SearchFormEvent(t1, t2, dtFrom, dtTo);
-			fireSearchEvent(ev);
-		}else if (e.getActionCommand().equals("EUR") || 
-					e.getActionCommand().equals("USD") ||
-					e.getActionCommand().equals("SEK")) {
-			String currency = e.getActionCommand();
-			String dF = date1.getText();
-			String dT = date2.getText();
-			
-			CurrencyChangeEvent ev = new CurrencyChangeEvent(currency, dF, dT);
-			fireCurrencyChangeEvent(ev);
-		}
+		
+		System.out.println(e.getActionCommand());
+		String t1 = ticker1.getText();
+		String t2 = ticker2.getText();
+		String dtFrom = date1.getText();
+		String dtTo = date2.getText();
+		
+		SearchFormEvent ev = new SearchFormEvent(t1, t2, dtFrom, dtTo);
+		fireSearchEvent(ev);
 		
 	}
 	
-	private void fireCurrencyChangeEvent(CurrencyChangeEvent ev) {
-		if (currencyListener != null) {
-			currencyListener.currencySwitch(ev);
-		}
-	}
-
 	private void fireSearchEvent(SearchFormEvent ev) {
 		if (searchListener != null) {
 			searchListener.searchPerformed(ev);
 		}
 	}
 
-	public void setCurrencyListener(CurrencyListener listener) {
-		this.currencyListener = listener;
-	}
-	
 	public void setSearchListener(SearchListener listener) {
 		this.searchListener = listener;
+	}
+	
+	public void setText(String s) {
+		textArea.setText(s);
 	}
 }
