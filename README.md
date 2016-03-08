@@ -1,2 +1,2 @@
 # School
-Repository for school stuff!
+Repository for school stuff! Adding a commit!
