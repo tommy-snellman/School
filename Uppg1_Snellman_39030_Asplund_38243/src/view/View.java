@@ -1,6 +1,7 @@
 package view;
 
 import java.awt.EventQueue;
+import java.awt.Graphics;
 
 import javax.swing.JFrame;
 import javax.swing.JTabbedPane;
@@ -31,7 +32,7 @@ import java.awt.Insets;
 import javax.swing.JTextPane;
 import javax.swing.JTextArea;
 
-@SuppressWarnings({ "unused", "serial" })
+@SuppressWarnings({"unused", "serial"})
 public class View extends JFrame implements ActionListener {
 	
 	private Model model;
@@ -43,6 +44,7 @@ public class View extends JFrame implements ActionListener {
 	private JTextField date2;
 	private final ButtonGroup buttonGroup = new ButtonGroup();
 	private JTextArea textArea;
+	private GraphPanel graphPanel;
 
 
 	/**
@@ -52,7 +54,6 @@ public class View extends JFrame implements ActionListener {
 	public View(Model model) {
 		this.model = model;
 		initialize();
-		
 	}
 
 	/**
@@ -104,36 +105,6 @@ public class View extends JFrame implements ActionListener {
 		searchPanel.add(ticker1, gbc_ticker1);
 		ticker1.setColumns(10);
 		
-		JLabel startDateLabel = new JLabel("Start Date:");
-		GridBagConstraints gbc_startDateLabel = new GridBagConstraints();
-		gbc_startDateLabel.anchor = GridBagConstraints.EAST;
-		gbc_startDateLabel.insets = new Insets(0, 0, 5, 5);
-		gbc_startDateLabel.gridx = 2;
-		gbc_startDateLabel.gridy = 0;
-		searchPanel.add(startDateLabel, gbc_startDateLabel);
-		startDateLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-		
-		date1 = new JTextField();
-		GridBagConstraints gbc_date1 = new GridBagConstraints();
-		gbc_date1.fill = GridBagConstraints.HORIZONTAL;
-		gbc_date1.insets = new Insets(0, 0, 5, 5);
-		gbc_date1.gridx = 3;
-		gbc_date1.gridy = 0;
-		searchPanel.add(date1, gbc_date1);
-		date1.setColumns(10);
-		
-		JRadioButton radioUSD = new JRadioButton("USD");
-		GridBagConstraints gbc_radioUSD = new GridBagConstraints();
-		gbc_radioUSD.anchor = GridBagConstraints.NORTH;
-		gbc_radioUSD.fill = GridBagConstraints.HORIZONTAL;
-		gbc_radioUSD.insets = new Insets(0, 0, 5, 0);
-		gbc_radioUSD.gridx = 4;
-		gbc_radioUSD.gridy = 0;
-		searchPanel.add(radioUSD, gbc_radioUSD);
-		radioUSD.addActionListener(this);
-		radioUSD.setSelected(true);
-		buttonGroup.add(radioUSD);
-		
 		JLabel ticker2Label = new JLabel("Ticker 2:");
 		GridBagConstraints gbc_ticker2Label = new GridBagConstraints();
 		gbc_ticker2Label.anchor = GridBagConstraints.EAST;
@@ -153,6 +124,25 @@ public class View extends JFrame implements ActionListener {
 		searchPanel.add(ticker2, gbc_ticker2);
 		ticker2.setColumns(10);
 		
+		JLabel startDateLabel = new JLabel("Start Date:");
+		GridBagConstraints gbc_startDateLabel = new GridBagConstraints();
+		gbc_startDateLabel.anchor = GridBagConstraints.EAST;
+		gbc_startDateLabel.insets = new Insets(0, 0, 5, 5);
+		gbc_startDateLabel.gridx = 2;
+		gbc_startDateLabel.gridy = 0;
+		searchPanel.add(startDateLabel, gbc_startDateLabel);
+		startDateLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+		
+		date1 = new JTextField();
+		date1.setText("14.01.2015");
+		GridBagConstraints gbc_date1 = new GridBagConstraints();
+		gbc_date1.fill = GridBagConstraints.HORIZONTAL;
+		gbc_date1.insets = new Insets(0, 0, 5, 5);
+		gbc_date1.gridx = 3;
+		gbc_date1.gridy = 0;
+		searchPanel.add(date1, gbc_date1);
+		date1.setColumns(10);
+		
 		JLabel endDateLabel = new JLabel("End Date:");
 		GridBagConstraints gbc_endDateLabel = new GridBagConstraints();
 		gbc_endDateLabel.anchor = GridBagConstraints.EAST;
@@ -163,6 +153,7 @@ public class View extends JFrame implements ActionListener {
 		endDateLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		
 		date2 = new JTextField();
+		date2.setText("14.01.2016");
 		GridBagConstraints gbc_date2 = new GridBagConstraints();
 		gbc_date2.fill = GridBagConstraints.HORIZONTAL;
 		gbc_date2.insets = new Insets(0, 0, 5, 5);
@@ -170,16 +161,6 @@ public class View extends JFrame implements ActionListener {
 		gbc_date2.gridy = 1;
 		searchPanel.add(date2, gbc_date2);
 		date2.setColumns(10);
-		
-		JRadioButton radioSEK = new JRadioButton("SEK");
-		GridBagConstraints gbc_radioSEK = new GridBagConstraints();
-		gbc_radioSEK.anchor = GridBagConstraints.NORTH;
-		gbc_radioSEK.fill = GridBagConstraints.HORIZONTAL;
-		gbc_radioSEK.gridx = 4;
-		gbc_radioSEK.gridy = 1;
-		searchPanel.add(radioSEK, gbc_radioSEK);
-		radioSEK.addActionListener(this);
-		buttonGroup.add(radioSEK);
 		
 		JButton searchButton = new JButton("Search");
 		searchButton.addActionListener(this);
@@ -189,6 +170,28 @@ public class View extends JFrame implements ActionListener {
 		gbc_searchButton.gridx = 1;
 		gbc_searchButton.gridy = 2;
 		searchPanel.add(searchButton, gbc_searchButton);
+		
+		JRadioButton radioUSD = new JRadioButton("USD");
+		GridBagConstraints gbc_radioUSD = new GridBagConstraints();
+		gbc_radioUSD.anchor = GridBagConstraints.NORTH;
+		gbc_radioUSD.fill = GridBagConstraints.HORIZONTAL;
+		gbc_radioUSD.insets = new Insets(0, 0, 5, 0);
+		gbc_radioUSD.gridx = 4;
+		gbc_radioUSD.gridy = 0;
+		searchPanel.add(radioUSD, gbc_radioUSD);
+		radioUSD.addActionListener(this);
+		radioUSD.setSelected(true);
+		buttonGroup.add(radioUSD);
+
+		JRadioButton radioSEK = new JRadioButton("SEK");
+		GridBagConstraints gbc_radioSEK = new GridBagConstraints();
+		gbc_radioSEK.anchor = GridBagConstraints.NORTH;
+		gbc_radioSEK.fill = GridBagConstraints.HORIZONTAL;
+		gbc_radioSEK.gridx = 4;
+		gbc_radioSEK.gridy = 1;
+		searchPanel.add(radioSEK, gbc_radioSEK);
+		radioSEK.addActionListener(this);
+		buttonGroup.add(radioSEK);
 		
 		JRadioButton radioEUR = new JRadioButton("EUR");
 		GridBagConstraints gbc_radioEUR = new GridBagConstraints();
@@ -208,7 +211,7 @@ public class View extends JFrame implements ActionListener {
 		gbc_tabbedPane.gridy = 1;
 		this.getContentPane().add(tabbedPane, gbc_tabbedPane);
 		
-		JPanel graphPanel = new JPanel();
+		graphPanel = new GraphPanel();
 		graphPanel.setBackground(Color.WHITE);
 		tabbedPane.addTab("Graph", null, graphPanel, null);
 		GridBagLayout gbl_graphPanel = new GridBagLayout();
@@ -259,12 +262,14 @@ public class View extends JFrame implements ActionListener {
 	
 	private void fireSearchEvent(SearchFormEvent ev) {
 		if (searchListener != null) {
+			this.repaint();
 			searchListener.searchPerformed(ev);
 		}
 	}
 
 	private void fireCurrencyChangeEvent(CurrencyChangeEvent ev) {
 		if (currencyListener != null) {
+			this.repaint();
 			currencyListener.currencySwitch(ev);
 		}
 	}
@@ -279,5 +284,10 @@ public class View extends JFrame implements ActionListener {
 	
 	public void setText(String s) {
 		textArea.setText(s);
+	}
+	
+	public void drawGraph() {
+		graphPanel.stock1 = model.getStock1();
+		graphPanel.stock2 = model.getStock2();
 	}
 }

@@ -1,5 +1,7 @@
 package controller;
 
+import javax.swing.JOptionPane;
+
 import model.Currency;
 import model.Model;
 import model.Stock;
@@ -20,13 +22,20 @@ public class Controller implements SearchListener, CurrencyListener {
 
 	private void compareStocks(Stock s1, Stock s2) {
 		String s = "";
-		for (int i = 0; i < (s1.getSize() - 1); i++) {
-			String cl1 = String.format("%.2f", Double.parseDouble(s1.getCloneClose(i)));
-			String cl2 = String.format("%.2f", Double.parseDouble(s2.getCloneClose(i)));
-			s += s1.getDate(i) + " stock: " + s1.getTicker() + " close: " + cl1 + " stock: " + s2.getTicker()
-					+ " close: " + cl2 + "\n";
+		try {
+			for (int i = 0; i < s1.getSize(); i++) {
+				String cl1 = String.format("%.2f", s1.getCloneClose(i));
+				String cl2 = String.format("%.2f", s2.getCloneClose(i));
+				s += s1.getDate(i) + " stock: " + s1.getTicker() + " close: " + cl1 + " stock: " + s2.getTicker()
+						+ " close: " + cl2 + "\n";
+			}
+		} catch (IndexOutOfBoundsException e) {
+			JOptionPane.showMessageDialog(null,
+					"Datumet är för gammalt, försök med ett nyare!", "För gammalt datum", JOptionPane.ERROR_MESSAGE);
+			e.printStackTrace();
 		}
 		view.setText(s);
+		view.drawGraph();
 	}
 
 	private void updateStocks(Stock s1, Stock s2, Currency curr) {

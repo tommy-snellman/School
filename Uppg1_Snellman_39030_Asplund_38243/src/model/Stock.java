@@ -58,12 +58,12 @@ public class Stock {
 			URL ul = new URL(this.url);
 			BufferedReader reader = new BufferedReader(new InputStreamReader(ul.openStream()));
 			String s;
+			reader.readLine();
 			while ((s = reader.readLine()) != null) {
 				String[] tmp = s.split("\\,");
 				data.add(new Node(tmp[0], tmp[1], tmp[2], tmp[3], tmp[4], tmp[5], tmp[6]));
 			}
 			Collections.reverse(data);
-			data.remove(data.size()-1);
 		} catch (MalformedURLException e) {
 
 		} catch (FileNotFoundException e) {
@@ -108,31 +108,63 @@ public class Stock {
 		return data.get(i).date;
 	}
 
-	public String getClose(int i) {
+	public Double getClose(int i) {
 		return data.get(i).close;
 	}
 	
-	public String getCloneClose(int i) {
+	public Double getCloneClose(int i) {
 		return clone.get(i).close;
 	}
 	
+	public double getMax() {
+		double max = 0;
+		
+		for (Node n : clone) {
+			if (n.close > max) {
+				max = n.close;
+			}
+		}
+		return max;
+	}
+	
+	public double getMin() {
+		double min = clone.get(0).close;
+		
+		for (Node n : clone) {
+			if (n.close < min) {
+				min = n.close;
+			}
+		}
+		return min;
+	}
+	
 	public void setClose(int i, String s) {
-		double tmp1 = Double.parseDouble(this.data.get(i).close);
+		double tmp1 = this.data.get(i).close;
 		double tmp2 = Double.parseDouble(s);
 		tmp1 *= tmp2;
-		this.clone.get(i).close = String.valueOf(tmp1);
+		this.clone.get(i).close = tmp1;
 	}
 
 	private class Node {
 		private String date;
-		private String open;
-		private String high;
-		private String low;
-		private String close;
-		private String volume;
-		private String adj_close;
+		private Double open;
+		private Double high;
+		private Double low;
+		private Double close;
+		private Double volume;
+		private Double adj_close;
 
 		private Node(String d, String o, String h, String l, String c, String v, String ac) {
+			this.date = d;
+			this.open = Double.parseDouble(o);
+			this.high = Double.parseDouble(h);
+			this.low = Double.parseDouble(l);
+			this.close = Double.parseDouble(c);
+			this.volume = Double.parseDouble(v);
+			this.adj_close = Double.parseDouble(ac);
+		}
+		
+		private Node(String d, double o, double h, double l, double c, double v, double ac) {
 			this.date = d;
 			this.open = o;
 			this.high = h;
