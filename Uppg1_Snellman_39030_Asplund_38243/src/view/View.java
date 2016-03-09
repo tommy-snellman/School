@@ -31,11 +31,12 @@ import java.awt.Insets;
 import javax.swing.JTextPane;
 import javax.swing.JTextArea;
 
-
+@SuppressWarnings({ "unused", "serial" })
 public class View extends JFrame implements ActionListener {
 	
 	private Model model;
 	private SearchListener searchListener;
+	private CurrencyListener currencyListener;
 	private JTextField ticker1;
 	private JTextField ticker2;
 	private JTextField date1;
@@ -61,88 +62,151 @@ public class View extends JFrame implements ActionListener {
 		this.setTitle("57ock 15l4nd");
 		this.setBounds(100, 100, 800, 600);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.getContentPane().setLayout(null);
 		this.setVisible(true);
+		GridBagLayout gridBagLayout = new GridBagLayout();
+		gridBagLayout.columnWidths = new int[]{434, 0};
+		gridBagLayout.rowHeights = new int[]{10, 251, 0};
+		gridBagLayout.columnWeights = new double[]{1.0, Double.MIN_VALUE};
+		gridBagLayout.rowWeights = new double[]{0.0, 1.0, Double.MIN_VALUE};
+		getContentPane().setLayout(gridBagLayout);
 		
-		JPanel panel = new JPanel();
-		panel.setBounds(0, 0, 784, 560);
-		getContentPane().add(panel);
-		panel.setLayout(null);
-		
-		JPanel SearchPanel = new JPanel();
-		SearchPanel.setBounds(0, 0, 784, 100);
-		panel.add(SearchPanel);
-		SearchPanel.setForeground(Color.GRAY);
-		SearchPanel.setBorder(new LineBorder(Color.DARK_GRAY));
-		SearchPanel.setLayout(null);
+		JPanel searchPanel = new JPanel();
+		searchPanel.setForeground(Color.GRAY);
+		searchPanel.setBorder(new LineBorder(Color.DARK_GRAY));
+		GridBagConstraints gbc_searchPanel = new GridBagConstraints();
+		gbc_searchPanel.fill = GridBagConstraints.HORIZONTAL;
+		gbc_searchPanel.gridx = 0;
+		gbc_searchPanel.gridy = 0;
+		this.getContentPane().add(searchPanel, gbc_searchPanel);
+		GridBagLayout gbl_searchPanel = new GridBagLayout();
+		gbl_searchPanel.columnWidths = new int[] {80, 80, 100, 90, 100};
+		gbl_searchPanel.rowHeights = new int[] {14, 14, 20, 30};
+		gbl_searchPanel.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0};
+		gbl_searchPanel.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0};
+		searchPanel.setLayout(gbl_searchPanel);
 		
 		JLabel ticker1Label = new JLabel("Ticker 1:");
-		ticker1Label.setBounds(10, 8, 54, 14);
-		SearchPanel.add(ticker1Label);
+		GridBagConstraints gbc_ticker1Label = new GridBagConstraints();
+		gbc_ticker1Label.anchor = GridBagConstraints.EAST;
+		gbc_ticker1Label.insets = new Insets(0, 0, 5, 5);
+		gbc_ticker1Label.gridx = 0;
+		gbc_ticker1Label.gridy = 0;
+		searchPanel.add(ticker1Label, gbc_ticker1Label);
 		ticker1Label.setHorizontalAlignment(SwingConstants.RIGHT);
 		ticker1Label.setVerticalAlignment(SwingConstants.TOP);
 		
 		ticker1 = new JTextField();
-		ticker1.setBounds(74, 5, 86, 20);
-		SearchPanel.add(ticker1);
+		GridBagConstraints gbc_ticker1 = new GridBagConstraints();
+		gbc_ticker1.fill = GridBagConstraints.HORIZONTAL;
+		gbc_ticker1.insets = new Insets(0, 0, 5, 5);
+		gbc_ticker1.gridx = 1;
+		gbc_ticker1.gridy = 0;
+		searchPanel.add(ticker1, gbc_ticker1);
 		ticker1.setColumns(10);
 		
 		JLabel startDateLabel = new JLabel("Start Date:");
-		startDateLabel.setBounds(174, 8, 54, 14);
-		SearchPanel.add(startDateLabel);
+		GridBagConstraints gbc_startDateLabel = new GridBagConstraints();
+		gbc_startDateLabel.anchor = GridBagConstraints.EAST;
+		gbc_startDateLabel.insets = new Insets(0, 0, 5, 5);
+		gbc_startDateLabel.gridx = 2;
+		gbc_startDateLabel.gridy = 0;
+		searchPanel.add(startDateLabel, gbc_startDateLabel);
 		startDateLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		
 		date1 = new JTextField();
-		date1.setBounds(231, 5, 86, 20);
-		SearchPanel.add(date1);
+		GridBagConstraints gbc_date1 = new GridBagConstraints();
+		gbc_date1.fill = GridBagConstraints.HORIZONTAL;
+		gbc_date1.insets = new Insets(0, 0, 5, 5);
+		gbc_date1.gridx = 3;
+		gbc_date1.gridy = 0;
+		searchPanel.add(date1, gbc_date1);
 		date1.setColumns(10);
 		
+		JRadioButton radioUSD = new JRadioButton("USD");
+		GridBagConstraints gbc_radioUSD = new GridBagConstraints();
+		gbc_radioUSD.anchor = GridBagConstraints.NORTH;
+		gbc_radioUSD.fill = GridBagConstraints.HORIZONTAL;
+		gbc_radioUSD.insets = new Insets(0, 0, 5, 0);
+		gbc_radioUSD.gridx = 4;
+		gbc_radioUSD.gridy = 0;
+		searchPanel.add(radioUSD, gbc_radioUSD);
+		radioUSD.addActionListener(this);
+		radioUSD.setSelected(true);
+		buttonGroup.add(radioUSD);
+		
 		JLabel ticker2Label = new JLabel("Ticker 2:");
-		ticker2Label.setBounds(10, 33, 54, 14);
-		SearchPanel.add(ticker2Label);
+		GridBagConstraints gbc_ticker2Label = new GridBagConstraints();
+		gbc_ticker2Label.anchor = GridBagConstraints.EAST;
+		gbc_ticker2Label.insets = new Insets(0, 0, 5, 5);
+		gbc_ticker2Label.gridx = 0;
+		gbc_ticker2Label.gridy = 1;
+		searchPanel.add(ticker2Label, gbc_ticker2Label);
 		ticker2Label.setHorizontalAlignment(SwingConstants.RIGHT);
 		
 		ticker2 = new JTextField();
-		ticker2.setBounds(74, 30, 86, 20);
-		SearchPanel.add(ticker2);
+		GridBagConstraints gbc_ticker2 = new GridBagConstraints();
+		gbc_ticker2.fill = GridBagConstraints.HORIZONTAL;
+		gbc_ticker2.anchor = GridBagConstraints.NORTH;
+		gbc_ticker2.insets = new Insets(0, 0, 5, 5);
+		gbc_ticker2.gridx = 1;
+		gbc_ticker2.gridy = 1;
+		searchPanel.add(ticker2, gbc_ticker2);
 		ticker2.setColumns(10);
 		
 		JLabel endDateLabel = new JLabel("End Date:");
-		endDateLabel.setBounds(180, 33, 48, 14);
-		SearchPanel.add(endDateLabel);
+		GridBagConstraints gbc_endDateLabel = new GridBagConstraints();
+		gbc_endDateLabel.anchor = GridBagConstraints.EAST;
+		gbc_endDateLabel.insets = new Insets(0, 0, 5, 5);
+		gbc_endDateLabel.gridx = 2;
+		gbc_endDateLabel.gridy = 1;
+		searchPanel.add(endDateLabel, gbc_endDateLabel);
 		endDateLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		
 		date2 = new JTextField();
-		date2.setBounds(231, 30, 86, 20);
-		SearchPanel.add(date2);
+		GridBagConstraints gbc_date2 = new GridBagConstraints();
+		gbc_date2.fill = GridBagConstraints.HORIZONTAL;
+		gbc_date2.insets = new Insets(0, 0, 5, 5);
+		gbc_date2.gridx = 3;
+		gbc_date2.gridy = 1;
+		searchPanel.add(date2, gbc_date2);
 		date2.setColumns(10);
 		
-		JButton searchButton = new JButton("Search");
-		searchButton.addActionListener(this);
-		searchButton.setBounds(74, 57, 86, 23);
-		SearchPanel.add(searchButton);
-		
 		JRadioButton radioSEK = new JRadioButton("SEK");
-		radioSEK.setBounds(360, 25, 109, 23);
-		SearchPanel.add(radioSEK);
+		GridBagConstraints gbc_radioSEK = new GridBagConstraints();
+		gbc_radioSEK.anchor = GridBagConstraints.NORTH;
+		gbc_radioSEK.fill = GridBagConstraints.HORIZONTAL;
+		gbc_radioSEK.gridx = 4;
+		gbc_radioSEK.gridy = 1;
+		searchPanel.add(radioSEK, gbc_radioSEK);
 		radioSEK.addActionListener(this);
 		buttonGroup.add(radioSEK);
 		
+		JButton searchButton = new JButton("Search");
+		searchButton.addActionListener(this);
+		GridBagConstraints gbc_searchButton = new GridBagConstraints();
+		gbc_searchButton.fill = GridBagConstraints.HORIZONTAL;
+		gbc_searchButton.insets = new Insets(0, 0, 5, 5);
+		gbc_searchButton.gridx = 1;
+		gbc_searchButton.gridy = 2;
+		searchPanel.add(searchButton, gbc_searchButton);
+		
 		JRadioButton radioEUR = new JRadioButton("EUR");
-		radioEUR.setBounds(360, 45, 109, 23);
-		SearchPanel.add(radioEUR);
+		GridBagConstraints gbc_radioEUR = new GridBagConstraints();
+		gbc_radioEUR.anchor = GridBagConstraints.NORTH;
+		gbc_radioEUR.fill = GridBagConstraints.HORIZONTAL;
+		gbc_radioEUR.gridx = 4;
+		gbc_radioEUR.gridy = 2;
+		searchPanel.add(radioEUR, gbc_radioEUR);
 		radioEUR.addActionListener(this);
 		buttonGroup.add(radioEUR);
 		
-		JRadioButton radioUSD = new JRadioButton("USD");
-		radioUSD.setBounds(360, 4, 109, 23);
-		SearchPanel.add(radioUSD);
-		radioUSD.addActionListener(this);
-		buttonGroup.add(radioUSD);
-		
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-		tabbedPane.setBounds(0, 99, 784, 461);
-		panel.add(tabbedPane);
+		GridBagConstraints gbc_tabbedPane = new GridBagConstraints();
+		gbc_tabbedPane.anchor = GridBagConstraints.SOUTH;
+		gbc_tabbedPane.fill = GridBagConstraints.BOTH;
+		gbc_tabbedPane.gridx = 0;
+		gbc_tabbedPane.gridy = 1;
+		this.getContentPane().add(tabbedPane, gbc_tabbedPane);
 		
 		JPanel graphPanel = new JPanel();
 		graphPanel.setBackground(Color.WHITE);
@@ -172,32 +236,41 @@ public class View extends JFrame implements ActionListener {
 		
 		textArea = new JTextArea();
 		scrollPane.setViewportView(textArea);
-		GridBagConstraints gbc_table = new GridBagConstraints();
-		gbc_table.insets = new Insets(0, 0, 5, 5);
-		gbc_table.fill = GridBagConstraints.BOTH;
-		gbc_table.gridx = 0;
-		gbc_table.gridy = 0;
 		textArea.setEditable(false);
 		
 	}
 	
 	public void actionPerformed(ActionEvent e) {
-		
-		System.out.println(e.getActionCommand());
-		String t1 = ticker1.getText();
-		String t2 = ticker2.getText();
-		String dtFrom = date1.getText();
-		String dtTo = date2.getText();
-		
-		SearchFormEvent ev = new SearchFormEvent(t1, t2, dtFrom, dtTo);
-		fireSearchEvent(ev);
-		
+		if (e.getActionCommand().equals("Search")) {
+			String t1 = ticker1.getText();
+			String t2 = ticker2.getText();
+			String dtFrom = date1.getText();
+			String dtTo = date2.getText();
+			SearchFormEvent ev = new SearchFormEvent(t1, t2, dtFrom, dtTo);
+			fireSearchEvent(ev);
+		} else if (e.getActionCommand().equals("USD") || e.getActionCommand().equals("SEK")
+				|| e.getActionCommand().equals("EUR")) {
+			String curr = e.getActionCommand();
+			CurrencyChangeEvent ev = new CurrencyChangeEvent(curr);
+			fireCurrencyChangeEvent(ev);
+		}
+
 	}
 	
 	private void fireSearchEvent(SearchFormEvent ev) {
 		if (searchListener != null) {
 			searchListener.searchPerformed(ev);
 		}
+	}
+
+	private void fireCurrencyChangeEvent(CurrencyChangeEvent ev) {
+		if (currencyListener != null) {
+			currencyListener.currencySwitch(ev);
+		}
+	}
+
+	public void setCurrencyListener(CurrencyListener listener) {
+		this.currencyListener = listener;
 	}
 
 	public void setSearchListener(SearchListener listener) {
